@@ -1,8 +1,134 @@
+html, body{
+	margin: 0;
+	padding: 0;
+	font-size: 14px;
+	font-family: MetricWeb, sans-serif;
+
+	background: #fff1e0;
+	/*background: linear-gradient(45deg, #fff1e0 0%,#e5d8c9 100%);*/
+	height: 100%;
+	width: 100%;
+}
+
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+	display: flex;
+}
+
+h1, h2, h3, h4, h5, h6{
+	margin-top: 0;
 }
 
 a {
-  color: #00B7FF;
+	color: #00B7FF;
+}
+
+#sidebar{
+	width: 315px;
+	height: 100%;
+	top: 0;
+	left: 0;
+	background: #333;
+	color: white;
+	padding: 1em;
+	box-sizing: border-box;
+	text-align: center;
+	padding-top: 1.3em;
+	box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.57);
+}
+
+#sidebar h2{
+	font-weight: 500;
+}
+
+#sidebar hr{
+	margin-top: 0;
+	padding-top: 0;
+	background: #999999;
+	border: transparent;
+	height: 1px;
+}
+
+#sidebar form#search{
+	margin-top: 1em;
+}
+
+#sidebar form input{
+	background: transparent;
+	border: 1px solid transparent;
+	width: 100%;
+	box-sizing: border-box;
+	padding-left: 2em;
+	font-weight: 400;
+	font-size: 18px;
+	border-bottom: 1px solid #929292;
+	padding: 5px 1em 5px 2em;
+	outline: transparent;
+	color: white;
+	background-image: url(https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Asearch?source=ftlabs-audio-management&width=50&height=50&tint=%23999999);
+	background-repeat: no-repeat;
+}
+
+#sidebar ul#actions{
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    text-align: right;
+    list-style-type: none;
+    font-size: 1.2em;
+    margin-top: 1em;
+    left: 0;
+}
+
+#sidebar ul#actions li{
+	padding: 0.5em 1em;
+	cursor: pointer;
+}
+
+#sidebar ul#actions li[data-selected="true"]{
+	padding: 0.5em 1em;
+	background-color: #9e2f50;
+}
+
+#sidebar ul#actions li a{
+	color: white;
+}
+
+#main{
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	overflow-y: scroll;
+	padding: 2em 0;
+}
+
+#main table{
+	width: 90%;
+	text-align: center;
+	border-collapse: collapse;
+	border: 1px solid #333;
+}
+
+#main table thead{
+	background: #333;
+	color: white;
+}
+
+#main table thead th{
+	padding: 10px 0.2em;
+}
+
+#main table tbody tr{
+	border-bottom: 1px solid;
+}
+
+#main table tbody tr:nth-child(even){
+	background: rgba(0,0,0,0.1);
+}
+
+#main table tbody td img{
+	height: 40px;
+}
+
+#main table tbody td img.delete{
+	cursor: pointer;
 }

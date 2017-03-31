@@ -132,3 +132,7 @@ a {
 #main table tbody td img.delete{
 	cursor: pointer;
 }
+
+#main table tbody td.headline{
+	text-align: left;
+}

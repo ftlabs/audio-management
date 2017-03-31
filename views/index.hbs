@@ -16,55 +16,93 @@
 
 </div>
 	
-	<div id="main">
+<div id="main">
 
-		<table>
-			<thead>
-				<tr>
-					<th>UUID</th>
-					<th>Headline</th>
-					<th>Provider</th>
-					<th>Audio File</th>
-					<th>Enabled?</th>
-					<th>Tagged?</th>
-					<th>Delete</th>
-				</tr>
-			</thead>
+	<table>
+		<thead>
+			<tr>
+				<th>UUID</th>
+				<th>Headline</th>
+				<th>Provider</th>
+				<th>Audio File</th>
+				<th>Enabled?</th>
+				<th>Tagged?</th>
+				<th>Delete</th>
+			</tr>
+		</thead>
 
-			<tbody>
+		<tbody>
 
-				<!--<tr>
-					<td><a href="https://www.ft.com/content/cce58e8e-158c-11e7-80f4-13e067d5072c" target="_blank">cce58e8e-158c-11e7-80f4-13e067d5072c</a></td>
-					<td>EU draws up tough stance on Brexit transition deal</td>
-					<td><a target="_blank" href="https://www.ft.com/content/cce58e8e-158c-11e7-80f4-13e067d5072c"><img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Aoutside-page?source=ftlabs-audio-management&width=50&height=50&tint=%2326747a" /></a></td>
-					<td><input type="checkbox" checked="checked"></td>
-					<td><img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Atick?source=ftlabs-audio-management&width=50&height=50&tint=%23333333" alt="ticked" /></td>
-					<td><img src="/images/bin.png" class="delete" alt="delete"></td>
-				</tr>-->
+			<!--<tr>
+				<td><a href="https://www.ft.com/content/cce58e8e-158c-11e7-80f4-13e067d5072c" target="_blank">cce58e8e-158c-11e7-80f4-13e067d5072c</a></td>
+				<td>EU draws up tough stance on Brexit transition deal</td>
+				<td><a target="_blank" href="https://www.ft.com/content/cce58e8e-158c-11e7-80f4-13e067d5072c"><img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Aoutside-page?source=ftlabs-audio-management&width=50&height=50&tint=%2326747a" /></a></td>
+				<td><input type="checkbox" checked="checked"></td>
+				<td><img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Atick?source=ftlabs-audio-management&width=50&height=50&tint=%23333333" alt="ticked" /></td>
+				<td><img src="/images/bin.png" class="delete" alt="delete"></td>
+			</tr>-->
 
-				{{#if audioAssets}}
-				
-					{{#each audioAssets}}
+			{{#if audioAssets}}
+			
+				{{#each audioAssets}}
 
-						<tr>
-							<td><a href="https://www.ft.com/content/{{this.uuid}}" target="_blank">{{this.uuid}}</a></td>
-							<td class="headline">{{this.title}}</td>
-							<td><strong>{{this.provider}}</strong></td>
-							<td><a target="_blank" href="{{this.publicURL}}"><img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Aoutside-page?source=ftlabs-audio-management&width=50&height=50&tint=%2326747a" /></a></td>
-							<td><input type="checkbox" checked="checked"></td>
-							<td><img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Atick?source=ftlabs-audio-management&width=50&height=50&tint=%23333333" alt="ticked" /></td>
-							<td><img src="/images/bin.png" class="delete" alt="delete"></td>
-						</tr>
-
-					{{/each}}
-
-				{{else}}
 					<tr>
-						<td>No articles are available for 3rd party consumption...</td><td></td>
+						<td><a href="https://www.ft.com/content/{{this.uuid}}" target="_blank">{{this.uuid}}</a></td>
+						<td class="headline">{{this.title}}</td>
+						<td><strong>{{this.provider}}</strong></td>
+						<td><a target="_blank" href="{{this.publicURL}}"><img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Aoutside-page?source=ftlabs-audio-management&width=50&height=50&tint=%2326747a" /></a></td>
+						<td><input type="checkbox" checked="checked"></td>
+						<td><img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Atick?source=ftlabs-audio-management&width=50&height=50&tint=%23333333" alt="ticked" /></td>
+						<td><img src="/images/bin.png" class="delete" alt="delete"></td>
 					</tr>
-				{{/if}}
 
-			</tbody>
-		</table>
-	
-	</div>
+				{{/each}}
+
+			{{else}}
+				<tr>
+					<td>No articles are available for 3rd party consumption...</td><td></td>
+				</tr>
+			{{/if}}
+
+		</tbody>
+	</table>
+
+</div>
+
+<script>
+
+	var sidebar = document.querySelector('#sidebar');
+	var table = document.querySelector('#main table');
+
+	var searchInput = sidebar.querySelector('form#search input');
+
+	var filterTimeout = "";
+
+	function filterRows(filterValue){
+
+		filterValue = filterValue.toLowerCase();
+
+		table.querySelectorAll('tbody tr').forEach(function(tr){
+
+			if(tr.innerHTML.toLowerCase().indexOf(filterValue) < 0){
+				tr.dataset.visible = 'false';
+			} else {
+				tr.dataset.visible = 'true';
+			}
+
+		});
+
+	}
+
+	searchInput.addEventListener('keyup', function(){
+
+		clearInterval(filterTimeout);
+		filterTimeout = setTimeout(function(){
+			console.log(this.value);
+			filterRows(this.value);
+		}.bind(this), 300);
+
+
+	}, false);
+
+</script>

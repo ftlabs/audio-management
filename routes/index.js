@@ -6,7 +6,7 @@ const database = require('../bin/lib/database');
 const generateS3URL = require('../bin/lib/generate-public-s3-url');
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/', (req, res, next) => {
 
 	database.scan({
 			TableName : process.env.AWS_AUDIO_METADATA_TABLE,
@@ -24,7 +24,7 @@ router.get('/', function(req, res, next) {
 			});
 
 			res.render('index', { 
-				title: 'Express',
+				title: 'FT Labs Audio Management',
 				audioAssets : Array.from(readiedAssets)
 			});
 
@@ -34,8 +34,6 @@ router.get('/', function(req, res, next) {
 		});
 	;
 
-
 });
-
 
 module.exports = router;

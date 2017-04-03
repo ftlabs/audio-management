@@ -23,7 +23,7 @@ h1, h2, h3, h4, h5, h6{
 }
 
 a {
-	color: #00B7FF;
+	color: #0097d2;
 }
 
 #sidebar{
@@ -65,7 +65,7 @@ a {
 	font-weight: 400;
 	font-size: 18px;
 	border-bottom: 1px solid #929292;
-	padding: 5px 1em 5px 2em;
+	padding: 10px 1em 10px 2em;
 	outline: transparent;
 	color: white;
 	background-image: url(https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Asearch?source=ftlabs-audio-management&width=50&height=50&tint=%23999999);
@@ -73,13 +73,12 @@ a {
 }
 
 #sidebar ul#actions{
-    margin: 0;
     padding: 0;
     width: 100%;
     text-align: right;
     list-style-type: none;
     font-size: 1.2em;
-    margin-top: 1em;
+    margin: 1em 0;
     left: 0;
 }
 

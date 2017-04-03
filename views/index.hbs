@@ -7,9 +7,8 @@
 	</form>
 
 	<ul id="actions">
-		<li data-selected="true"><a>All Assets</a></li>
-		<li><a>Disabled Items</a></li>
-		<li><a>Deleted Items</a></li>
+		<li data-selected="true" data-action="reset"><a>All Assets</a></li>
+		<li data-action="disabled"><a>Disabled Items</a></li>
 	</ul>
 
 	<hr/>
@@ -78,6 +77,27 @@
 
 	var filterTimeout = "";
 
+	var actions = {
+		reset : showAll,
+		disabled : showDisabled
+	};
+
+	function showAll(){
+		table.querySelectorAll('tbody tr').forEach(function(tr){
+			tr.dataset.visible = 'true';
+		});
+	}
+
+	function showDisabled(){
+		table.querySelectorAll('tbody tr').forEach(function(tr){
+
+			if(tr.querySelector('input[type=checkbox]').checked === true){
+				tr.dataset.visible = 'false';				
+			}
+
+		});
+	}
+
 	function filterRows(filterValue){
 
 		filterValue = filterValue.toLowerCase();
@@ -98,11 +118,29 @@
 
 		clearInterval(filterTimeout);
 		filterTimeout = setTimeout(function(){
-			console.log(this.value);
+			
+			sidebar.querySelectorAll('ul li').forEach(function(li){
+				li.dataset.selected = false;
+			});
+			//console.log(this.value);
 			filterRows(this.value);
-		}.bind(this), 300);
-
+		
+		}.bind(this), 200);
 
 	}, false);
+
+	sidebar.querySelectorAll('ul li').forEach(function(li){
+		li.addEventListener('click', function(){
+
+			sidebar.querySelectorAll('ul li').forEach(function(li){
+				li.dataset.selected = false;
+			});
+
+			this.dataset.selected = true;
+
+			actions[this.dataset.action]();
+
+		}, false);
+	});
 
 </script>

@@ -50,7 +50,7 @@
 						<td class="headline">{{this.title}}</td>
 						<td><strong>{{this.provider}}</strong></td>
 						<td><a target="_blank" href="{{this.publicURL}}"><img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Aoutside-page?source=ftlabs-audio-management&width=50&height=50&tint=%2326747a" /></a></td>
-						<td><input type="checkbox" checked="checked"></td>
+						<td><input type="checkbox" data-uuid="{{this.uuid}}" {{#if this.enabled}}checked="checked"{{/if}}></td>
 						<td><img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Atick?source=ftlabs-audio-management&width=50&height=50&tint=%23333333" alt="ticked" /></td>
 						<td><img src="/images/bin.png" class="delete" alt="delete"></td>
 					</tr>
@@ -122,7 +122,7 @@
 			sidebar.querySelectorAll('ul li').forEach(function(li){
 				li.dataset.selected = false;
 			});
-			//console.log(this.value);
+
 			filterRows(this.value);
 		
 		}.bind(this), 200);
@@ -141,6 +141,34 @@
 			actions[this.dataset.action]();
 
 		}, false);
+	});
+
+	Array.from(table.querySelectorAll('input[type="checkbox"]')).forEach(function(checkbox){
+
+		checkbox.addEventListener('click', function(){
+
+			var enableOrDisable = this.checked === false ? 'disable' : 'enable';
+
+			console.log('/actions/' + enableOrDisable + '/' + this.dataset.uuid);
+
+			fetch('/actions/' + enableOrDisable + '/' + this.dataset.uuid)
+				.then(function(res){
+					if(res.ok){
+						return res.json();
+					} else {
+						throw res;
+					}
+				})
+				.then(function(response){
+					console.log(response);
+				})
+				.catch(function(err){
+					console.log('Err', err);
+				})
+			;
+			
+		}, false);
+
 	});
 
 </script>

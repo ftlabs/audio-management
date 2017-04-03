@@ -6,7 +6,7 @@ const database = require('../bin/lib/database');
 const generateS3URL = require('../bin/lib/generate-public-s3-url');
 
 /* GET home page. */
-router.get('/', (req, res, next) => {
+router.get('/', (req, res) => {
 
 	database.scan({
 			TableName : process.env.AWS_AUDIO_METADATA_TABLE,

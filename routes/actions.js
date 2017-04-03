@@ -1,4 +1,5 @@
 const debug = require('debug')('audio-management:routes:action');
+const fetch = require('node-fetch');
 const express = require('express');
 const router = express.Router();
 
@@ -9,7 +10,7 @@ router.get(`^(/enable|/disable)/:UUID(${uuidRegex})$`, (req, res) => {
 
 	debug(req.params.UUID);
 
-	var enable = req.path.indexOf('enable') > -1;
+	const enable = req.path.indexOf('enable') > -1;
 
 	database.read({
 			uuid : req.params.UUID
@@ -35,7 +36,7 @@ router.get(`^(/enable|/disable)/:UUID(${uuidRegex})$`, (req, res) => {
 
 		})
 		.then(adjustedItem => {
-
+			
 			return database.write(adjustedItem, process.env.AWS_AUDIO_METADATA_TABLE)
 				.then(function(thing){
 					debug(thing)
@@ -43,6 +44,20 @@ router.get(`^(/enable|/disable)/:UUID(${uuidRegex})$`, (req, res) => {
 						status : 'ok',
 						message : `The availability for item ${req.params.UUID} has been toggled. It is now enabled: ${enable}`
 					})
+
+					fetch(`${process.env.FT_AVAILABILITY_SERVICE_URL}/purge/${req.params.UUID}?purgeToken=${process.env.FT_AVAILABILITY_SERVICE_CACHE_PURGE_KEY}`)
+						.then(res => {
+							if(res.ok){
+								return res.json();
+							} else {
+								throw res;
+							}
+						})
+						.catch(err => {
+							debug(`An error occurred purging the cache for ${req.params.UUID} at ${process.env.FT_AVAILABILITY_SERVICE_URL}`, err);
+						})
+					;
+
 				})
 			;
 

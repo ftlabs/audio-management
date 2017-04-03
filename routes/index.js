@@ -4,6 +4,7 @@ const router = express.Router();
 
 const database = require('../bin/lib/database');
 const generateS3URL = require('../bin/lib/generate-public-s3-url');
+const dateStampToUnix = require('../bin/lib/convert-datestamp-to-unix');
 
 /* GET home page. */
 router.get('/', (req, res) => {
@@ -19,9 +20,22 @@ router.get('/', (req, res) => {
 		.then(data => {
 
 			const readiedAssets = data.Items.map(item => {
-				item.publicURL = generateS3URL(item.uuid);
-				return item;
-			});
+					item.publicURL = generateS3URL(item.uuid);
+					return item;
+				})
+				.sort( (a, b) => {
+
+					const aTime = dateStampToUnix( a.pubdate );
+					const bTime = dateStampToUnix( b.pubdate );
+
+					if(aTime > bTime){
+						return 1
+					} else if(aTime < bTime){
+						return -1;
+					}
+
+				})
+			;
 
 			res.render('index', { 
 				title: 'FT Labs Audio Management',

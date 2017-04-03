@@ -1,0 +1,1 @@
+const awssdk = require('aws-sdk');

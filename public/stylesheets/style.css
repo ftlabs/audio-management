@@ -1,5 +1,5 @@
 *[data-visible="false"]{
-	display: none;
+	display: none !important;
 }
 
 html, body{
@@ -138,4 +138,53 @@ a {
 
 #main table tbody td.headline{
 	text-align: left;
+}
+
+#deleteConfirm{
+	position: fixed;
+	left: 0;
+	top: 0;
+	background: rgba(66, 0, 0, 0.9);
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+#deleteConfirm strong{
+	font-size: 1.15em;
+}
+
+#deleteConfirm .dialog{
+    display: flex;
+    flex-direction: column;
+    background: white;
+    box-shadow: 0 10px 20px black;
+    padding: 20px 50px;
+    width: 400px;
+    text-align: center;
+}
+
+#deleteConfirm .dialog .dialogButtons{
+	display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+#deleteConfirm .dialog .dialogButtons button{
+	background: #9a9a9a;
+    border: 1px solid transparent;
+    padding: 10px 8px;
+    color: white;
+    font-weight: 800;
+    font-size: 1em;
+    max-width: 159px;
+    cursor: pointer;
+    margin-left: 1em;
+}
+
+
+#deleteConfirm .dialog .dialogButtons button.confirm{
+	background: #bd0000;		
 }

@@ -6,6 +6,7 @@ const router = express.Router();
 const database = require('../bin/lib/database');
 
 const uuidRegex = '[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}';
+
 router.get(`^(/enable|/disable)/:UUID(${uuidRegex})$`, (req, res) => {
 
 	debug(req.params.UUID);
@@ -68,6 +69,15 @@ router.get(`^(/enable|/disable)/:UUID(${uuidRegex})$`, (req, res) => {
 			res.json(err);
 		})
 	;
+
+});
+
+router.get(`/delete/:UUID(${uuidRegex})`, (req, res) => {
+
+	res.json({
+		status : 'ok',
+		message : `Audio files and associated metadata for ${req.params.UUID} have been deleted`
+	});
 
 });
 

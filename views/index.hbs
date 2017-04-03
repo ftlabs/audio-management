@@ -106,7 +106,7 @@
 	};
 
 	function deleteItem(uuid){
-		return fetch('/actions/delete/' + uuid)
+		return fetch('/actions/delete/' + uuid, {credentials: 'same-origin'})
 			.then(function(res){
 				if(res.ok){
 					return res.json();
@@ -216,7 +216,7 @@
 
 			console.log('/actions/' + enableOrDisable + '/' + this.dataset.uuid);
 
-			fetch('/actions/' + enableOrDisable + '/' + this.dataset.uuid)
+			fetch('/actions/' + enableOrDisable + '/' + this.dataset.uuid, {credentials: 'same-origin'})
 				.then(function(res){
 					if(res.ok){
 						return res.json();

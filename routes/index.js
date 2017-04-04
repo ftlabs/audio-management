@@ -40,9 +40,9 @@ router.get('/', (req, res) => {
 					const bTime = dateStampToUnix( b.pubdate );
 
 					if(aTime > bTime){
-						return 1
+						return -1
 					} else if(aTime < bTime){
-						return -1;
+						return 1;
 					}
 
 				})

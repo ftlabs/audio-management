@@ -1,9 +1,9 @@
 const debug = require('debug')('audio-management:routes:action');
-const fetch = require('node-fetch');
 const express = require('express');
 const router = express.Router();
 
 const database = require('../bin/lib/database');
+const purgeCacheItem = require('../bin/lib/purge-availability-cache-of-item');
 const obliviate = require('../bin/lib/delete-files-and-metadata-for-item');
 
 const uuidRegex = '[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}';
@@ -47,16 +47,9 @@ router.get(`^(/enable|/disable)/:UUID(${uuidRegex})$`, (req, res) => {
 						message : `The availability for item ${req.params.UUID} has been toggled. It is now enabled: ${enable}`
 					})
 
-					fetch(`${process.env.FT_AVAILABILITY_SERVICE_URL}/purge/${req.params.UUID}?purgeToken=${process.env.FT_AVAILABILITY_SERVICE_CACHE_PURGE_KEY}`)
-						.then(res => {
-							if(res.ok){
-								return res.json();
-							} else {
-								throw res;
-							}
-						})
+					purgeCacheItem(req.params.UUID)
 						.catch(err => {
-							debug(`An error occurred purging the cache for ${req.params.UUID} at ${process.env.FT_AVAILABILITY_SERVICE_URL}`, err);
+							debug(err);
 						})
 					;
 
@@ -78,11 +71,17 @@ router.get(`/delete/:UUID(${uuidRegex})`, (req, res) => {
 	obliviate(req.params.UUID)
 		.then(function(){
 
+			purgeCacheItem(req.params.UUID)
+				.catch(err => {
+					debug(err);
+				})
+			;
+
 			res.json({
 				status : 'ok',
 				message : `Audio files and associated metadata for ${req.params.UUID} have been deleted`
 			});
-			
+
 		})
 	;
 

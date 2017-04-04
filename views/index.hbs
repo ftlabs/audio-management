@@ -45,7 +45,7 @@
 			
 				{{#each audioAssets}}
 
-					<tr>
+					<tr data-uuid="{{this.uuid}}">
 						<td><a href="https://www.ft.com/content/{{this.uuid}}" target="_blank">{{this.uuid}}</a></td>
 						<td class="headline">{{this.title}}</td>
 						<td><strong>{{this.provider}}</strong></td>
@@ -86,6 +86,10 @@
 			<button class="confirm">Delete Item</button>
 		</div>
 
+		<div class="progressOverlay" data-visible="false">
+			<div class="o-loading o-loading--dark o-loading--small"></div>
+		</div>
+
 	</div>
 
 </div>
@@ -95,6 +99,7 @@
 	var sidebar = document.querySelector('#sidebar');
 	var table = document.querySelector('#main table');
 	var deleteDialog = document.querySelector('#deleteConfirm');
+	var deleteSpinner = deleteDialog.querySelector('.progressOverlay');
 
 	var searchInput = sidebar.querySelector('form#search input');
 
@@ -128,6 +133,7 @@
 	function hideDeleteDialog(){
 		deleteDialog.dataset.visible = 'false';
 		deleteDialog.dataset.uuid = '';
+		deleteSpinner.dataset.visible = 'false';
 	}
 
 	function showAll(){
@@ -196,9 +202,13 @@
 	}, false);
 
 	deleteDialog.querySelector('.confirm').addEventListener('click', function(){
+		deleteSpinner.dataset.visible = 'true';
 		deleteItem(deleteDialog.dataset.uuid)
 			.then(function(response){
 				console.log(response);
+				var row = table.querySelector('tr[data-uuid="' + deleteDialog.dataset.uuid + '"]');
+				row.parentNode.removeChild(row);
+				
 				hideDeleteDialog();
 			})
 			.catch(function(res){

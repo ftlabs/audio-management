@@ -4,6 +4,7 @@ const express = require('express');
 const router = express.Router();
 
 const database = require('../bin/lib/database');
+const obliviate = require('../bin/lib/delete-files-and-metadata-for-item');
 
 const uuidRegex = '[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}';
 
@@ -74,10 +75,17 @@ router.get(`^(/enable|/disable)/:UUID(${uuidRegex})$`, (req, res) => {
 
 router.get(`/delete/:UUID(${uuidRegex})`, (req, res) => {
 
-	res.json({
-		status : 'ok',
-		message : `Audio files and associated metadata for ${req.params.UUID} have been deleted`
-	});
+	obliviate(req.params.UUID)
+		.then(function(){
+
+			res.json({
+				status : 'ok',
+				message : `Audio files and associated metadata for ${req.params.UUID} have been deleted`
+			});
+			
+		})
+	;
+
 
 });
 

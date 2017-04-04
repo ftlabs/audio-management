@@ -19,7 +19,18 @@ router.get('/', (req, res) => {
 		})
 		.then(data => {
 
-			const readiedAssets = data.Items.map(item => {
+			const readiedAssets = data.Items.filter(item => {
+					// Items that have been deleted from the database still have their UUID
+					// and enabled values saved, so that if they're reabsorbed, a previously
+					// disabled item will not become re-enabled by default;
+					// The keys are uuid, and enabled 
+					if(Object.keys(item).length > 2){
+						return true;
+					} else {
+						return false;
+					}
+				})
+				.map(item => {
 					item.publicURL = generateS3URL(item.uuid);
 					return item;
 				})

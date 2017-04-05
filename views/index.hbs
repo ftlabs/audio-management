@@ -9,6 +9,7 @@
 	<ul id="actions">
 		<li data-selected="true" data-action="reset"><a>All Assets</a></li>
 		<li data-action="disabled"><a>Disabled Items</a></li>
+		<li data-action="tagged"><a>Tagged Items</a></li>
 	</ul>
 
 	<hr/>
@@ -46,14 +47,14 @@
 			
 				{{#each audioAssets}}
 
-					<tr data-uuid="{{this.uuid}}">
+					<tr data-uuid="{{this.uuid}}" data-tagged="{{this.tagged}}">
 						<td><a href="https://www.ft.com/content/{{this.uuid}}" target="_blank">{{this.uuid}}</a></td>
 						<td class="headline">{{this.title}}</td>
 						<td>{{this.pubdate}}</td>
 						<td><strong>{{this.provider}}</strong></td>
 						<td><a target="_blank" href="{{this.publicURL}}"><img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Aoutside-page?source=ftlabs-audio-management&width=50&height=50&tint=%2326747a" /></a></td>
 						<td><input type="checkbox" data-uuid="{{this.uuid}}" {{#if this.enabled}}checked="checked"{{/if}}></td>
-						<td><img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Atick?source=ftlabs-audio-management&width=50&height=50&tint=%23333333" alt="ticked" /></td>
+						<td>{{#if this.tagged}}<img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Atick?source=ftlabs-audio-management&width=50&height=50&tint=%23333333" alt="ticked" />{{else}}<img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Across?source=ftlabs-audio-management&width=50&height=50&tint=%23333333" alt="crossed" />{{/if}}</td>
 						<td><img src="/images/bin.png" data-uuid="{{this.uuid}}" class="delete" alt="delete"></td>
 					</tr>
 
@@ -109,7 +110,8 @@
 
 	var actions = {
 		reset : showAll,
-		disabled : showDisabled
+		disabled : showDisabled,
+		tagged : showTagged
 	};
 
 	function deleteItem(uuid){
@@ -149,6 +151,18 @@
 
 			if(tr.querySelector('input[type=checkbox]').checked === true){
 				tr.dataset.visible = 'false';				
+			}
+
+		});
+	}
+
+	function showTagged(){
+		table.querySelectorAll('tbody tr').forEach(function(tr){
+
+			if(tr.dataset.tagged === 'false'){
+				tr.dataset.visible = 'false';				
+			} else if (tr.dataset.tagged === 'true'){
+				tr.dataset.visible = 'true';
 			}
 
 		});

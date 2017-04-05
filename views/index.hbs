@@ -53,7 +53,7 @@
 						<td><strong>{{this.provider}}</strong></td>
 						<td><a target="_blank" href="{{this.publicURL}}"><img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Aoutside-page?source=ftlabs-audio-management&width=50&height=50&tint=%2326747a" /></a></td>
 						<td><input type="checkbox" data-uuid="{{this.uuid}}" {{#if this.enabled}}checked="checked"{{/if}}></td>
-						<td><img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Atick?source=ftlabs-audio-management&width=50&height=50&tint=%23333333" alt="ticked" /></td>
+						<td>{{#if this.tagged}}<img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Atick?source=ftlabs-audio-management&width=50&height=50&tint=%23333333" alt="ticked" />{{else}}<img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Across?source=ftlabs-audio-management&width=50&height=50&tint=%23333333" alt="crossed" />{{/if}}</td>
 						<td><img src="/images/bin.png" data-uuid="{{this.uuid}}" class="delete" alt="delete"></td>
 					</tr>
 

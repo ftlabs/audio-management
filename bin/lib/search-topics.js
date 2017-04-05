@@ -1,11 +1,5 @@
-const debug = require('debug')('bin:lib:search-topic');
+const debug = require('debug')('bin:lib:search-topics');
 const fetch = require('node-fetch');
-const lru = require('lru-cache');
-
-const cache = lru({
-	max : 100,
-	maxAge : 1000 * 60
-});
 
 module.exports = function(topic){
 	const SAPI_URL_MINUS_KEY = `${process.env.CAPI_ENDPOINT}/search/v1`;
@@ -23,13 +17,6 @@ module.exports = function(topic){
   		}
   	};
 
-	const cachedSearchResponse = cache.get(SAPI_URL_MINUS_KEY);
-
-	if(cachedSearchResponse !== undefined){
-		debug(`Delivering ${SAPI_URL_MINUS_KEY} from cache`);
-		return Promise.resolve( cachedSearchResponse );
-	}
-
 	return fetch(SAPI_URL, {
 			'method'       : 'POST', 
 			'body'         :  JSON.stringify(SEARCH_BODY),
@@ -42,13 +29,8 @@ module.exports = function(topic){
 			if(res.status !== 200){
 				throw `An error occurred retrieving ${SAPI_URL} with body=${JSON.stringify(SEARCH_BODY)},\nres=${JSON.stringify(res)}`;
 			} else {
-				return res;
+				return res.json();
 			}
-		})
-		.then(res => res.json())
-		.then(res => {
-			cache.set(SAPI_URL_MINUS_KEY, res);
-			return res;
 		})
 	;
 }

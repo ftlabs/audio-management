@@ -9,6 +9,7 @@
 	<ul id="actions">
 		<li data-selected="true" data-action="reset"><a>All Assets</a></li>
 		<li data-action="disabled"><a>Disabled Items</a></li>
+		<li data-action="tagged"><a>Tagged Items</a></li>
 	</ul>
 
 	<hr/>
@@ -46,7 +47,7 @@
 			
 				{{#each audioAssets}}
 
-					<tr data-uuid="{{this.uuid}}">
+					<tr data-uuid="{{this.uuid}}" data-tagged="{{this.tagged}}">
 						<td><a href="https://www.ft.com/content/{{this.uuid}}" target="_blank">{{this.uuid}}</a></td>
 						<td class="headline">{{this.title}}</td>
 						<td>{{this.pubdate}}</td>
@@ -109,7 +110,8 @@
 
 	var actions = {
 		reset : showAll,
-		disabled : showDisabled
+		disabled : showDisabled,
+		tagged : showTagged
 	};
 
 	function deleteItem(uuid){
@@ -149,6 +151,18 @@
 
 			if(tr.querySelector('input[type=checkbox]').checked === true){
 				tr.dataset.visible = 'false';				
+			}
+
+		});
+	}
+
+	function showTagged(){
+		table.querySelectorAll('tbody tr').forEach(function(tr){
+
+			if(tr.dataset.tagged === 'false'){
+				tr.dataset.visible = 'false';				
+			} else if (tr.dataset.tagged === 'true'){
+				tr.dataset.visible = 'true';
 			}
 
 		});

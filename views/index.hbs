@@ -105,152 +105,24 @@
 
 <script>
 
-	var sidebar = document.querySelector('#sidebar');
-	var table = document.querySelector('#main table');
-	var deleteDialog = document.querySelector('#deleteConfirm');
-	var deleteSpinner = deleteDialog.querySelector('.progressOverlay');
+	(function(){
+		var sidebar = document.querySelector('#sidebar');
+		var table = document.querySelector('#main table');
+		var deleteDialog = document.querySelector('#deleteConfirm');
+		var deleteSpinner = deleteDialog.querySelector('.progressOverlay');
 
-	var searchInput = sidebar.querySelector('form#search input');
+		var searchInput = sidebar.querySelector('form#search input');
 
-	var filterTimeout = "";
+		var filterTimeout = "";
 
-	var actions = {
-		reset : showAll,
-		disabled : showDisabled,
-		tagged : showTagged
-	};
+		var actions = {
+			reset : showAll,
+			disabled : showDisabled,
+			tagged : showTagged
+		};
 
-	function deleteItem(uuid){
-		return fetch('/actions/delete/' + uuid, {credentials: 'same-origin'})
-			.then(function(res){
-				if(res.ok){
-					return res.json();
-				} else {
-					throw res;
-				}
-			})
-		;
-	}
-
-	function showDeleteDialog(uuid){
-
-		deleteDialog.dataset.visible = 'true';
-		deleteDialog.dataset.uuid = uuid;
-		deleteDialog.querySelector('.uuidToDelete').textContent = uuid;
-
-	}
-
-	function hideDeleteDialog(){
-		deleteDialog.dataset.visible = 'false';
-		deleteDialog.dataset.uuid = '';
-		deleteSpinner.dataset.visible = 'false';
-	}
-
-	function showAll(){
-		table.querySelectorAll('tbody tr').forEach(function(tr){
-			tr.dataset.visible = 'true';
-		});
-	}
-
-	function showDisabled(){
-		table.querySelectorAll('tbody tr').forEach(function(tr){
-
-			if(tr.querySelector('input[type=checkbox]').checked === true){
-				tr.dataset.visible = 'false';				
-			} else {
-				tr.dataset.visible = 'true';
-			}
-
-		});
-	}
-
-	function showTagged(){
-		table.querySelectorAll('tbody tr').forEach(function(tr){
-
-			if(tr.dataset.tagged === 'false'){
-				tr.dataset.visible = 'false';				
-			} else if (tr.dataset.tagged === 'true'){
-				tr.dataset.visible = 'true';
-			}
-
-		});
-	}
-
-	function filterRows(filterValue){
-
-		filterValue = filterValue.toLowerCase();
-
-		table.querySelectorAll('tbody tr').forEach(function(tr){
-
-			if(tr.innerHTML.toLowerCase().indexOf(filterValue) < 0){
-				tr.dataset.visible = 'false';
-			} else {
-				tr.dataset.visible = 'true';
-			}
-
-		});
-
-	}
-
-	searchInput.addEventListener('keyup', function(){
-
-		clearInterval(filterTimeout);
-		filterTimeout = setTimeout(function(){
-			
-			sidebar.querySelectorAll('ul li').forEach(function(li){
-				li.dataset.selected = false;
-			});
-
-			filterRows(this.value);
-		
-		}.bind(this), 200);
-
-	}, false);
-
-	sidebar.querySelectorAll('ul li').forEach(function(li){
-		li.addEventListener('click', function(){
-
-			sidebar.querySelectorAll('ul li').forEach(function(li){
-				li.dataset.selected = false;
-			});
-
-			this.dataset.selected = true;
-
-			actions[this.dataset.action]();
-
-		}, false);
-	});
-
-	deleteDialog.querySelector('.cancel').addEventListener('click', function(){
-		hideDeleteDialog();
-	}, false);
-
-	deleteDialog.querySelector('.confirm').addEventListener('click', function(){
-		deleteSpinner.dataset.visible = 'true';
-		deleteItem(deleteDialog.dataset.uuid)
-			.then(function(response){
-				console.log(response);
-				var row = table.querySelector('tr[data-uuid="' + deleteDialog.dataset.uuid + '"]');
-				row.parentNode.removeChild(row);
-				
-				hideDeleteDialog();
-			})
-			.catch(function(res){
-				console.log('An error occurred delete an item: ' + deleteDialog.dataset.uuid, res);
-				hideDeleteDialog();
-			})
-		;
-	}, false);
-
-	Array.from(table.querySelectorAll('input[type="checkbox"]')).forEach(function(checkbox){
-
-		checkbox.addEventListener('click', function(){
-
-			var enableOrDisable = this.checked === false ? 'disable' : 'enable';
-
-			console.log('/actions/' + enableOrDisable + '/' + this.dataset.uuid);
-
-			fetch('/actions/' + enableOrDisable + '/' + this.dataset.uuid, {credentials: 'same-origin'})
+		function deleteItem(uuid){
+			return fetch('/actions/delete/' + uuid, {credentials: 'same-origin'})
 				.then(function(res){
 					if(res.ok){
 						return res.json();
@@ -258,27 +130,159 @@
 						throw res;
 					}
 				})
+			;
+		}
+
+		function showDeleteDialog(uuid){
+
+			deleteDialog.dataset.visible = 'true';
+			deleteDialog.dataset.uuid = uuid;
+			deleteDialog.querySelector('.uuidToDelete').textContent = uuid;
+
+		}
+
+		function hideDeleteDialog(){
+			deleteDialog.dataset.visible = 'false';
+			deleteDialog.dataset.uuid = '';
+			deleteSpinner.dataset.visible = 'false';
+		}
+
+		function showAll(){
+			table.querySelectorAll('tbody tr').forEach(function(tr){
+				tr.dataset.visible = 'true';
+			});
+		}
+
+		function showDisabled(){
+			table.querySelectorAll('tbody tr').forEach(function(tr){
+
+				if(tr.querySelector('input[type=checkbox]').checked === true){
+					tr.dataset.visible = 'false';				
+				} else {
+					tr.dataset.visible = 'true';
+				}
+
+			});
+		}
+
+		function showTagged(){
+			table.querySelectorAll('tbody tr').forEach(function(tr){
+
+				if(tr.dataset.tagged === 'false'){
+					tr.dataset.visible = 'false';				
+				} else if (tr.dataset.tagged === 'true'){
+					tr.dataset.visible = 'true';
+				}
+
+			});
+		}
+
+		function filterRows(filterValue){
+
+			filterValue = filterValue.toLowerCase();
+
+			table.querySelectorAll('tbody tr').forEach(function(tr){
+
+				if(tr.innerHTML.toLowerCase().indexOf(filterValue) < 0){
+					tr.dataset.visible = 'false';
+				} else {
+					tr.dataset.visible = 'true';
+				}
+
+			});
+
+		}
+
+		searchInput.addEventListener('keyup', function(){
+
+			clearInterval(filterTimeout);
+			filterTimeout = setTimeout(function(){
+				
+				sidebar.querySelectorAll('ul li').forEach(function(li){
+					li.dataset.selected = false;
+				});
+
+				filterRows(this.value);
+			
+			}.bind(this), 200);
+
+		}, false);
+
+		sidebar.querySelectorAll('ul li').forEach(function(li){
+			li.addEventListener('click', function(){
+
+				sidebar.querySelectorAll('ul li').forEach(function(li){
+					li.dataset.selected = false;
+				});
+
+				this.dataset.selected = true;
+
+				actions[this.dataset.action]();
+
+			}, false);
+		});
+
+		deleteDialog.querySelector('.cancel').addEventListener('click', function(){
+			hideDeleteDialog();
+		}, false);
+
+		deleteDialog.querySelector('.confirm').addEventListener('click', function(){
+			deleteSpinner.dataset.visible = 'true';
+			deleteItem(deleteDialog.dataset.uuid)
 				.then(function(response){
 					console.log(response);
+					var row = table.querySelector('tr[data-uuid="' + deleteDialog.dataset.uuid + '"]');
+					row.parentNode.removeChild(row);
+					
+					hideDeleteDialog();
 				})
-				.catch(function(err){
-					console.log('Err', err);
+				.catch(function(res){
+					console.log('An error occurred delete an item: ' + deleteDialog.dataset.uuid, res);
+					hideDeleteDialog();
 				})
 			;
-			
 		}, false);
 
-	});
-	
-	Array.from(table.querySelectorAll('.delete')).forEach(function(deleteBtn){
+		Array.from(table.querySelectorAll('input[type="checkbox"]')).forEach(function(checkbox){
 
-		deleteBtn.addEventListener('click', function(){
+			checkbox.addEventListener('click', function(){
 
-			console.log(this);
-			showDeleteDialog(this.dataset.uuid);
+				var enableOrDisable = this.checked === false ? 'disable' : 'enable';
+
+				console.log('/actions/' + enableOrDisable + '/' + this.dataset.uuid);
+
+				fetch('/actions/' + enableOrDisable + '/' + this.dataset.uuid, {credentials: 'same-origin'})
+					.then(function(res){
+						if(res.ok){
+							return res.json();
+						} else {
+							throw res;
+						}
+					})
+					.then(function(response){
+						console.log(response);
+					})
+					.catch(function(err){
+						console.log('Err', err);
+					})
+				;
 				
-		}, false);
+			}, false);
 
-	});
+		});
+		
+		Array.from(table.querySelectorAll('.delete')).forEach(function(deleteBtn){
+
+			deleteBtn.addEventListener('click', function(){
+
+				console.log(this);
+				showDeleteDialog(this.dataset.uuid);
+					
+			}, false);
+
+		});
+
+
+	}());
 
 </script>

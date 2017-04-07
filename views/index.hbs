@@ -10,6 +10,7 @@
 		<li data-selected="true" data-action="reset"><a>All Assets</a></li>
 		<li data-action="disabled"><a>Disabled Items</a></li>
 		<li data-action="tagged"><a>Tagged Items</a></li>
+		<li data-action="untagged"><a>Untagged Items</a></li>
 	</ul>
 
 	<hr/>
@@ -118,7 +119,8 @@
 		var actions = {
 			reset : showAll,
 			disabled : showDisabled,
-			tagged : showTagged
+			tagged : showTagged,
+			untagged : showUntagged
 		};
 
 		function deleteItem(uuid){
@@ -171,6 +173,18 @@
 				if(tr.dataset.tagged === 'false'){
 					tr.dataset.visible = 'false';				
 				} else if (tr.dataset.tagged === 'true'){
+					tr.dataset.visible = 'true';
+				}
+
+			});
+		}
+
+		function showUntagged(){
+			table.querySelectorAll('tbody tr').forEach(function(tr){
+
+				if(tr.dataset.tagged === 'true'){
+					tr.dataset.visible = 'false';				
+				} else if (tr.dataset.tagged === 'false'){
 					tr.dataset.visible = 'true';
 				}
 

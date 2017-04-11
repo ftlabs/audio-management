@@ -7,6 +7,18 @@ The audio management dashboard lists all of the audio files of FT content availa
 
 From here, each item can be listened to, disabled, deleted, and re-enabled if previously deleted.
 
+## Building
+
+1. First, clone this repo.
+2. `cd` into the cloned repo.
+3. Run `npm i`
+4. The project will now be built
+
+## Running
+
+1. Having followed the building steps, run `npm run start`
+2. Providing all requisite env vars have been correctly configured, the dashboard should not be accessible on [localhost:3000](http://localhost:3000)
+
 ### Deleting an articles audio files
 
 An item can be deleted by clicking the bin on its row in the table. A confirm dialog will appear to make sure you really mean to do this. 
@@ -18,7 +30,6 @@ An entry for the article will still persist in the DynamoDB audio metadata table
 The delete action will trigger a purge of the audio availability service's cache, so that all FT services that were using the asset will immediately become aware of the change.
 
 ![delete-item](https://cloud.githubusercontent.com/assets/913687/24906039/1d5fa6d6-1eae-11e7-97cb-5a234330c785.png)
-
 
 ### Disabling audio for an article
 

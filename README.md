@@ -1,10 +1,34 @@
 # FT Labs Audio Management Service
 A place for FT staff to manage the availability of FT audio content.
 
+![audio-dash](https://cloud.githubusercontent.com/assets/913687/24905804/23c2786a-1ead-11e7-8434-897ff30fb1f2.png)
+
+The audio management dashboard lists all of the audio files of FT content available for consumption by our apps and services.
+
+From here, each item can be listened to, disabled, deleted, and re-enabled if previously deleted.
+
+### Deleting an articles audio files
+
+An item can be deleted by clicking the bin on its row in the table. A confirm dialog will appear to make sure you really mean to do this. 
+
+If you decide you really want to delete the audio assets for an FT article, all existing audio files and metadata will be deleted immediately. 
+
+An entry for the article will still persist in the DynamoDB audio metadata table with a `uuid` and an `enabled` property. This is so any files that have been deleted after having been disabled will still be disabled if they are reabsorbed.
+
+The delete action will trigger a purge of the audio availability service's cache, so that all FT services that were using the asset will immediately become aware of the change.
+
+![delete-item](https://cloud.githubusercontent.com/assets/913687/24906039/1d5fa6d6-1eae-11e7-97cb-5a234330c785.png)
+
+
+### Disabling audio for an article
+
+The availability of an articles audio content can also be toggled with the enabled/disabled checkbox.
+
+Checking/unchecking a box will trigger a purge of the audio availability service's cache, so that all FT services that were using the asset will immediately become aware of the change.
+
 ## Environment Variables
 
 **DEBUG**
-
 - A string to filter logging. `*` will output all logs.
 
 **AWS_ACCESS_KEY_ID**

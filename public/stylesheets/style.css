@@ -117,6 +117,7 @@ a {
 }
 
 #main table thead th{
+	font-weight: 600;
 	padding: 10px 0.2em;
 }
 

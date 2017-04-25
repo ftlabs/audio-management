@@ -25,6 +25,18 @@
 	
 <div id="main">
 
+	{{#if rogueAssets}}
+
+		{{#each rogueAssets}}
+
+			<div class="rogueasset" data-collapsed="false" data-uuid="{{this.id}}">
+				Article <a href="https://ft.com/content/{{this.id}}" target="_blank">{{this.id}}</a> has been tagged as an 'audio article' but has no metadata or audio files to support it. <br />If possible, please check that this article is supposed to be tagged with 'audio article'.
+			</div>
+
+		{{/each}}
+
+	{{/if}}
+
 	<table>
 		<thead>
 			<tr>
@@ -296,6 +308,11 @@
 
 		});
 
+		Array.from( document.querySelectorAll('.rogueasset') ).forEach(function(asset){
+			asset.addEventListener('click', function(){
+				this.dataset.collapsed = 'true';
+			}, false);
+		})
 
 	}());
 

@@ -20,14 +20,11 @@ router.get('/', (req, res) => {
 		})
 		.then(data => {
 
-
 			searchTopics('audio-articles')
 				.then(taggedArticles => {
 
 					taggedArticles = taggedArticles.results[0].results;
 
-					// debug(taggedArticles);
-					
 					const readiedAssets = data.Items.filter(item => {
 							// Items that have been deleted from the database still have their UUID
 							// and enabled values saved, so that if they're reabsorbed, a previously
@@ -62,9 +59,16 @@ router.get('/', (req, res) => {
 						})
 					;
 
+					const rogueAssets = taggedArticles.map(taggedArticle => {
+							return readiedAssets.some( asset => { return asset.uuid === taggedArticle.id } ) ? null : taggedArticle
+						})
+						.filter(a => {return a !== null})
+					;
+
 					res.render('index', { 
 						title: 'FT Labs Audio Management',
-						audioAssets : Array.from(readiedAssets)
+						audioAssets : Array.from(readiedAssets),
+						rogueAssets : Array.from(rogueAssets)
 					});
 
 				})

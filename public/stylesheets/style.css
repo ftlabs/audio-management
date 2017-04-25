@@ -99,9 +99,25 @@ a {
 #main{
 	width: 100%;
 	display: flex;
-	justify-content: center;
 	overflow-y: scroll;
 	padding: 2em 0;
+	flex-direction: column;
+	align-content: center;
+	align-items: center;
+}
+
+.rogueasset {
+    width: 90%;
+    box-sizing: border-box;
+    padding: 1em;
+    margin-bottom: 0.5em;
+    background: #2e6e9e;
+    color: white;
+}
+
+.rogueasset a{
+	color: white;
+	font-weight: 600;
 }
 
 #main table{

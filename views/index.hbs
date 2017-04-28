@@ -7,10 +7,10 @@
 	</form>
 
 	<ul id="actions">
-		<li data-selected="true" data-action="reset"><a>All Assets</a></li>
-		<li data-action="disabled"><a>Disabled Items</a></li>
-		<li data-action="tagged"><a>Tagged Items</a></li>
-		<li data-action="untagged"><a>Untagged Items</a></li>
+		<li data-selected="true" data-action="reset"><a>All Assets <span id="countsAll">({{counts.all}})</span></a></li>
+		<li data-action="disabled"><a>Disabled Items <span id="countsDisabled">({{counts.disabled}})</span></a></li>
+		<li data-action="tagged"><a>Tagged Items  <span id="countsTagged">({{counts.tagged}})</span></a></li>
+		<li data-action="untagged"><a>Untagged Items <span id="countsUntagged">({{counts.untagged}})</span></a></li>
 	</ul>
 
 	<hr/>
@@ -134,6 +134,8 @@
 			tagged : showTagged,
 			untagged : showUntagged
 		};
+
+		var numberOfDisabledItems = Number(document.querySelector('span#countsDisabled').textContent.replace(/[\(\)]/g, ''));
 
 		function deleteItem(uuid){
 			return fetch('/actions/delete/' + uuid, {credentials: 'same-origin'})
@@ -287,6 +289,15 @@
 					})
 					.then(function(response){
 						console.log(response);
+
+						if(enableOrDisable === 'disable'){
+							numberOfDisabledItems += 1;
+						} else {
+							numberOfDisabledItems -= 1;
+						}
+
+						document.querySelector('span#countsDisabled').textContent = '(' + numberOfDisabledItems + ')';
+
 					})
 					.catch(function(err){
 						console.log('Err', err);

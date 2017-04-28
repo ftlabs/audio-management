@@ -92,6 +92,10 @@ a {
 	background-color: #9e2f50;
 }
 
+#sidebar ul#actions li span{
+	font-weight: 600;
+}
+
 #sidebar ul#actions li a{
 	color: white;
 }

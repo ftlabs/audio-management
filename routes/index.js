@@ -25,6 +25,8 @@ router.get('/', (req, res) => {
 
 					taggedArticles = taggedArticles.results[0].results;
 
+					let disabledCount = 0;
+
 					const readiedAssets = data.Items.filter(item => {
 							// Items that have been deleted from the database still have their UUID
 							// and enabled values saved, so that if they're reabsorbed, a previously
@@ -42,6 +44,10 @@ router.get('/', (req, res) => {
 							item.tagged = taggedArticles.some(tagged => {
 								return tagged.id === item.uuid;
 							});
+
+							if(item.enabled === false){
+								disabledCount += 1;
+							}
 
 							return item;
 						})
@@ -68,7 +74,13 @@ router.get('/', (req, res) => {
 					res.render('index', { 
 						title: 'FT Labs Audio Management',
 						audioAssets : Array.from(readiedAssets),
-						rogueAssets : Array.from(rogueAssets)
+						rogueAssets : Array.from(rogueAssets),
+						counts : {
+							all : readiedAssets.length,
+							tagged : taggedArticles.length,
+							untagged : readiedAssets.length - taggedArticles.length,
+							disabled : disabledCount
+						}
 					});
 
 				})

@@ -5,6 +5,7 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const S3O = require('s3o-middleware');
+const log = require('./bin/lib/log');
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(S3O);
+app.use(log);
 
 app.use('/', require('./routes/index'));
 app.use('/actions', require('./routes/actions'));

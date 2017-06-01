@@ -68,7 +68,7 @@ router.get('/', (req, res) => {
 					res.render('index', { 
 						title: 'FT Labs Audio Management',
 						audioAssets : Array.from(readiedAssets),
-						rogueAssets : Array.from(rogueAssets)
+						rogueAssets : process.env.NODE_ENV === 'production' || req.query.showrogue === 'true' ? Array.from(rogueAssets) : []
 					});
 
 				})

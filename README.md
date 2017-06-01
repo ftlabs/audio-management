@@ -37,6 +37,12 @@ The availability of an articles audio content can also be toggled with the enabl
 
 Checking/unchecking a box will trigger a purge of the audio availability service's cache, so that all FT services that were using the asset will immediately become aware of the change.
 
+### Viewing rogue articles
+
+It is possible for an article to have been tagged by the `audio-articles` topic, but that we have never received, or do not currently have audio information for that article. In a production environment (an environment where the environment variable `NODE_ENV` is set to `production`), a banner will appear above the table to alert the user that the audio for this article has 'gone rogue'. 
+
+To view these rogue articles on a development environment, add the query parameter `?showrogues=true` to the end of the URL for the dashboard, and they will appear.
+
 ## Environment Variables
 
 **DEBUG**

@@ -23,8 +23,6 @@ router.get('/', (req, res) => {
 			searchTopics('audio-articles')
 				.then(taggedArticles => {
 
-					taggedArticles = taggedArticles.results[0].results;
-
 					const readiedAssets = data.Items.filter(item => {
 							// Items that have been deleted from the database still have their UUID
 							// and enabled values saved, so that if they're reabsorbed, a previously

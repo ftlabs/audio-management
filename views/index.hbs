@@ -202,35 +202,6 @@
 
 		}
 
-		searchInput.addEventListener('keyup', function(){
-
-			clearInterval(filterTimeout);
-			filterTimeout = setTimeout(function(){
-				
-				sidebar.querySelectorAll('ul li').forEach(function(li){
-					li.dataset.selected = false;
-				});
-
-				filterRows(this.value);
-			
-			}.bind(this), 200);
-
-		}, false);
-
-		sidebar.querySelectorAll('ul li').forEach(function(li){
-			li.addEventListener('click', function(){
-
-				sidebar.querySelectorAll('ul li').forEach(function(li){
-					li.dataset.selected = false;
-				});
-
-				this.dataset.selected = true;
-
-				actions[this.dataset.action]();
-
-			}, false);
-		});
-
 		deleteDialog.querySelector('.cancel').addEventListener('click', function(){
 			hideDeleteDialog();
 		}, false);
@@ -305,7 +276,36 @@
 					}, false);
 
 				});
-		
+				
+				searchInput.addEventListener('keyup', function(){
+
+					clearInterval(filterTimeout);
+					filterTimeout = setTimeout(function(){
+						
+						sidebar.querySelectorAll('ul li').forEach(function(li){
+							li.dataset.selected = false;
+						});
+
+						filterRows(this.value);
+					
+					}.bind(this), 200);
+
+				}, false);
+
+				sidebar.querySelectorAll('ul li').forEach(function(li){
+					li.addEventListener('click', function(){
+
+						sidebar.querySelectorAll('ul li').forEach(function(li){
+							li.dataset.selected = false;
+						});
+
+						this.dataset.selected = true;
+
+						actions[this.dataset.action]();
+
+					}, false);
+				});
+
 			})
 			.catch(function(err){
 				console.log('An error occurred getting the table data', err);

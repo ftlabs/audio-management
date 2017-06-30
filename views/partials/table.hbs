@@ -1,0 +1,31 @@
+<!--<tr>
+	<td><a href="https://www.ft.com/content/cce58e8e-158c-11e7-80f4-13e067d5072c" target="_blank">cce58e8e-158c-11e7-80f4-13e067d5072c</a></td>
+	<td>EU draws up tough stance on Brexit transition deal</td>
+	<td><a target="_blank" href="https://www.ft.com/content/cce58e8e-158c-11e7-80f4-13e067d5072c"><img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Aoutside-page?source=ftlabs-audio-management&width=50&height=50&tint=%2326747a" /></a></td>
+	<td><input type="checkbox" checked="checked"></td>
+	<td><img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Atick?source=ftlabs-audio-management&width=50&height=50&tint=%23333333" alt="ticked" /></td>
+	<td><img src="/images/bin.png" class="delete" alt="delete"></td>
+</tr>-->
+
+{{#if audioAssets}}
+
+	{{#each audioAssets}}
+
+		<tr data-uuid="{{this.uuid}}" data-tagged="{{this.tagged}}">
+			<td><a href="https://www.ft.com/content/{{this.uuid}}" target="_blank">{{this.uuid}}</a></td>
+			<td class="headline">{{this.title}}</td>
+			<td>{{this.pubdate}}</td>
+			<td><strong>{{this.provider}}</strong></td>
+			<td><a target="_blank" href="{{this.publicURL}}"><img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Aoutside-page?source=ftlabs-audio-management&width=50&height=50&tint=%2326747a" /></a></td>
+			<td><input type="checkbox" data-uuid="{{this.uuid}}" {{#if this.enabled}}checked="checked"{{/if}}></td>
+			<td>{{#if this.tagged}}<img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Atick?source=ftlabs-audio-management&width=50&height=50&tint=%23333333" alt="ticked" />{{else}}<img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Across?source=ftlabs-audio-management&width=50&height=50&tint=%23333333" alt="crossed" />{{/if}}</td>
+			<td><img src="/images/bin.png" data-uuid="{{this.uuid}}" class="delete" alt="delete"></td>
+		</tr>
+
+	{{/each}}
+
+{{else}}
+	<tr>
+		<td>No articles are available for 3rd party consumption...</td><td></td>
+	</tr>
+{{/if}}

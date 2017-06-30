@@ -6,12 +6,15 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const S3O = require('s3o-middleware');
 const log = require('./bin/lib/log');
+const registerPartials = require('./bin/lib/register-handlebar-partials');
 
 const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
+
+registerPartials();
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));

@@ -81,9 +81,8 @@ function scanDatabase(query){
 	debug('Scanning database', query);
 
 	const results = [];
-	let offsetKey = undefined;
 
-	function scan(query, recursive = false){
+	function scan(query){
 
 		return new Promise( (resolve, reject) => {
 
@@ -98,8 +97,7 @@ function scanDatabase(query){
 					} else {
 						debug(data.Items.length);
 						results.push(data);
-						if(data.LastEvaluatedKey !== undefined && recursive === true){
-							debug(`More results to parse. Scanning with ExclusiveStartKey: '${data.LastEvaluatedKey}'`);
+						if(data.LastEvaluatedKey !== undefined){
 							query.ExclusiveStartKey = data.LastEvaluatedKey;
 							return scan(query)
 								.then(function(){
@@ -107,7 +105,6 @@ function scanDatabase(query){
 								})
 							;
 						} else {
-							offsetKey = data.LastEvaluatedKey;
 							resolve();
 						}
 
@@ -135,8 +132,7 @@ function scanDatabase(query){
 			debug('Total number of items:', totalItems.length);
 
 			return {
-				Items : totalItems,
-				offsetKey : offsetKey
+				Items : totalItems
 			};
 
 		})

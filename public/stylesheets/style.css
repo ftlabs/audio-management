@@ -100,14 +100,19 @@ a {
 	width: 100%;
 	display: flex;
 	overflow-y: scroll;
-	padding: 2em 0;
+	/*padding: 2em 0;*/
 	flex-direction: column;
 	align-content: center;
 	align-items: center;
 }
 
+
+#rogueAssetsHolder{
+	width: 90%;
+}
+
 .rogueasset {
-    width: 90%;
+    width: 100%;
     box-sizing: border-box;
     padding: 1em;
     margin-bottom: 0.5em;
@@ -125,6 +130,12 @@ a {
 	text-align: center;
 	border-collapse: collapse;
 	border: 1px solid #333;
+	margin: 2em 0;
+}
+
+#main table[data-loading="true"]{
+	filter: grayscale(100%) blur(2px);
+	animation: pulse 4s infinite ease-in-out;
 }
 
 #main table thead{
@@ -217,4 +228,26 @@ a {
 	background: rgba(255,255,255,.95);
 	align-items: center;
 	justify-content: center;
+}
+
+#tableLoading{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+	position: absolute;
+}
+
+#tableLoading .o-loading{
+	width: 30px;
+	height: 30px;
+	margin-bottom: 1em;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.8; }
+  50% { opacity: 0.3; }
+  100% { opacity: 0.8; }
 }

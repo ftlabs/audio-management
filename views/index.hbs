@@ -25,19 +25,9 @@
 	
 <div id="main">
 
-	{{#if rogueAssets}}
+	<div id="rogueAssetsHolder"></div>
 
-		{{#each rogueAssets}}
-
-			<div class="rogueasset" data-collapsed="false" data-uuid="{{this.id}}">
-				Article <a href="https://ft.com/content/{{this.id}}" target="_blank">{{this.id}}</a> has been tagged as an 'audio article' but has no metadata or audio files to support it. <br />If possible, please check that this article is supposed to be tagged with 'audio article'.
-			</div>
-
-		{{/each}}
-
-	{{/if}}
-
-	<table id="entriesTable">
+	<table id="entriesTable" data-loading="true">
 		<thead>
 			<tr>
 				<th>UUID</th>
@@ -55,8 +45,29 @@
 
 			<!--Table entries are lazy loaded here...-->
 
+			<tr><td>XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX</td><td class="headline">---</td><td>---</td><td><strong>---</strong></td><td><a><img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Aoutside-page?source=ftlabs-audio-management&amp;width=50&amp;height=50&amp;tint=%2326747a"></a></td><td><input type="checkbox" checked="checked"></td><td><img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Atick?source=ftlabs-audio-management&amp;width=50&amp;height=50&amp;tint=%23333333" alt="ticked"></td><td><img src="/images/bin.png" class="delete" alt="delete"></td></tr>
+			<tr><td>XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX</td><td class="headline">---</td><td>---</td><td><strong>---</strong></td><td><a><img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Aoutside-page?source=ftlabs-audio-management&amp;width=50&amp;height=50&amp;tint=%2326747a"></a></td><td><input type="checkbox" checked="checked"></td><td><img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Atick?source=ftlabs-audio-management&amp;width=50&amp;height=50&amp;tint=%23333333" alt="ticked"></td><td><img src="/images/bin.png" class="delete" alt="delete"></td></tr>
+			<tr><td>XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX</td><td class="headline">---</td><td>---</td><td><strong>---</strong></td><td><a><img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Aoutside-page?source=ftlabs-audio-management&amp;width=50&amp;height=50&amp;tint=%2326747a"></a></td><td><input type="checkbox" checked="checked"></td><td><img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Atick?source=ftlabs-audio-management&amp;width=50&amp;height=50&amp;tint=%23333333" alt="ticked"></td><td><img src="/images/bin.png" class="delete" alt="delete"></td></tr>
+			<tr><td>XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX</td><td class="headline">---</td><td>---</td><td><strong>---</strong></td><td><a><img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Aoutside-page?source=ftlabs-audio-management&amp;width=50&amp;height=50&amp;tint=%2326747a"></a></td><td><input type="checkbox" checked="checked"></td><td><img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Atick?source=ftlabs-audio-management&amp;width=50&amp;height=50&amp;tint=%23333333" alt="ticked"></td><td><img src="/images/bin.png" class="delete" alt="delete"></td></tr>
+			<tr><td>XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX</td><td class="headline">---</td><td>---</td><td><strong>---</strong></td><td><a><img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Aoutside-page?source=ftlabs-audio-management&amp;width=50&amp;height=50&amp;tint=%2326747a"></a></td><td><input type="checkbox" checked="checked"></td><td><img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Atick?source=ftlabs-audio-management&amp;width=50&amp;height=50&amp;tint=%23333333" alt="ticked"></td><td><img src="/images/bin.png" class="delete" alt="delete"></td></tr>
+			<tr><td>XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX</td><td class="headline">---</td><td>---</td><td><strong>---</strong></td><td><a><img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Aoutside-page?source=ftlabs-audio-management&amp;width=50&amp;height=50&amp;tint=%2326747a"></a></td><td><input type="checkbox" checked="checked"></td><td><img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Atick?source=ftlabs-audio-management&amp;width=50&amp;height=50&amp;tint=%23333333" alt="ticked"></td><td><img src="/images/bin.png" class="delete" alt="delete"></td></tr>
+			<tr><td>XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX</td><td class="headline">---</td><td>---</td><td><strong>---</strong></td><td><a><img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Aoutside-page?source=ftlabs-audio-management&amp;width=50&amp;height=50&amp;tint=%2326747a"></a></td><td><input type="checkbox" checked="checked"></td><td><img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Atick?source=ftlabs-audio-management&amp;width=50&amp;height=50&amp;tint=%23333333" alt="ticked"></td><td><img src="/images/bin.png" class="delete" alt="delete"></td></tr>
+			<tr><td>XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX</td><td class="headline">---</td><td>---</td><td><strong>---</strong></td><td><a><img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Aoutside-page?source=ftlabs-audio-management&amp;width=50&amp;height=50&amp;tint=%2326747a"></a></td><td><input type="checkbox" checked="checked"></td><td><img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Atick?source=ftlabs-audio-management&amp;width=50&amp;height=50&amp;tint=%23333333" alt="ticked"></td><td><img src="/images/bin.png" class="delete" alt="delete"></td></tr>
+			<tr><td>XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX</td><td class="headline">---</td><td>---</td><td><strong>---</strong></td><td><a><img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Aoutside-page?source=ftlabs-audio-management&amp;width=50&amp;height=50&amp;tint=%2326747a"></a></td><td><input type="checkbox" checked="checked"></td><td><img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Atick?source=ftlabs-audio-management&amp;width=50&amp;height=50&amp;tint=%23333333" alt="ticked"></td><td><img src="/images/bin.png" class="delete" alt="delete"></td></tr>
+			<tr><td>XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX</td><td class="headline">---</td><td>---</td><td><strong>---</strong></td><td><a><img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Aoutside-page?source=ftlabs-audio-management&amp;width=50&amp;height=50&amp;tint=%2326747a"></a></td><td><input type="checkbox" checked="checked"></td><td><img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Atick?source=ftlabs-audio-management&amp;width=50&amp;height=50&amp;tint=%23333333" alt="ticked"></td><td><img src="/images/bin.png" class="delete" alt="delete"></td></tr>
+			<tr><td>XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX</td><td class="headline">---</td><td>---</td><td><strong>---</strong></td><td><a><img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Aoutside-page?source=ftlabs-audio-management&amp;width=50&amp;height=50&amp;tint=%2326747a"></a></td><td><input type="checkbox" checked="checked"></td><td><img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Atick?source=ftlabs-audio-management&amp;width=50&amp;height=50&amp;tint=%23333333" alt="ticked"></td><td><img src="/images/bin.png" class="delete" alt="delete"></td></tr>
+			<tr><td>XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX</td><td class="headline">---</td><td>---</td><td><strong>---</strong></td><td><a><img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Aoutside-page?source=ftlabs-audio-management&amp;width=50&amp;height=50&amp;tint=%2326747a"></a></td><td><input type="checkbox" checked="checked"></td><td><img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Atick?source=ftlabs-audio-management&amp;width=50&amp;height=50&amp;tint=%23333333" alt="ticked"></td><td><img src="/images/bin.png" class="delete" alt="delete"></td></tr>
+			<tr><td>XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX</td><td class="headline">---</td><td>---</td><td><strong>---</strong></td><td><a><img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Aoutside-page?source=ftlabs-audio-management&amp;width=50&amp;height=50&amp;tint=%2326747a"></a></td><td><input type="checkbox" checked="checked"></td><td><img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Atick?source=ftlabs-audio-management&amp;width=50&amp;height=50&amp;tint=%23333333" alt="ticked"></td><td><img src="/images/bin.png" class="delete" alt="delete"></td></tr>
+			<tr><td>XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX</td><td class="headline">---</td><td>---</td><td><strong>---</strong></td><td><a><img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Aoutside-page?source=ftlabs-audio-management&amp;width=50&amp;height=50&amp;tint=%2326747a"></a></td><td><input type="checkbox" checked="checked"></td><td><img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Atick?source=ftlabs-audio-management&amp;width=50&amp;height=50&amp;tint=%23333333" alt="ticked"></td><td><img src="/images/bin.png" class="delete" alt="delete"></td></tr>
+			<tr><td>XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX</td><td class="headline">---</td><td>---</td><td><strong>---</strong></td><td><a><img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Aoutside-page?source=ftlabs-audio-management&amp;width=50&amp;height=50&amp;tint=%2326747a"></a></td><td><input type="checkbox" checked="checked"></td><td><img src="https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1%3Atick?source=ftlabs-audio-management&amp;width=50&amp;height=50&amp;tint=%23333333" alt="ticked"></td><td><img src="/images/bin.png" class="delete" alt="delete"></td></tr>
+
 		</tbody>
 	</table>
+
+	<div id="tableLoading">
+		<div class="o-loading o-loading--dark "></div>
+		<h3>Loading audio articles data...</h3>
+	</div>
 
 </div>
 
@@ -93,6 +104,8 @@
 		var table = document.querySelector('#main table');
 		var deleteDialog = document.querySelector('#deleteConfirm');
 		var deleteSpinner = deleteDialog.querySelector('.progressOverlay');
+		var rogueAssetsHolder = document.querySelector('#main #rogueAssetsHolder');
+		var tableLoading = document.querySelector('#tableLoading');
 
 		var searchInput = sidebar.querySelector('form#search input');
 
@@ -248,7 +261,12 @@
 				}
 			})
 			.then(function(tableHTML){
+
 				table.querySelector('tbody').innerHTML = tableHTML;
+				
+				table.dataset.loading = "false";
+				tableLoading.dataset.visible = "false";
+
 				Array.from(table.querySelectorAll('input[type="checkbox"]')).forEach(function(checkbox){
 
 					checkbox.addEventListener('click', function(){
@@ -287,18 +305,42 @@
 					}, false);
 
 				});
-
-				Array.from( document.querySelectorAll('.rogueasset') ).forEach(function(asset){
-					asset.addEventListener('click', function(){
-						this.dataset.collapsed = 'true';
-					}, false);
-				});
 		
 			})
 			.catch(function(err){
 				console.log('An error occurred getting the table data', err);
 			})
 		;
+
+		console.log(new URL(window.location.href).searchParams.get("showrogue") );
+
+		if(new URL(window.location.href).searchParams.get("showrogue") !== 'false'){
+
+			fetch('/rogueassets', {credentials : 'include'})
+				.then(function(res){
+					if(res.ok){
+						return res.text();
+					} else {
+						throw res;
+					}
+				})
+				.then(function(rogueHTML){
+					rogueAssetsHolder.innerHTML = rogueHTML;
+
+					Array.from( document.querySelectorAll('.rogueasset') ).forEach(function(asset){
+						asset.addEventListener('click', function(){
+							this.dataset.collapsed = 'true';
+						}, false);
+					});
+
+				})
+				.catch(function(err){
+					console.log(err);
+				})
+			;
+
+		}
+
 
 	}());
 

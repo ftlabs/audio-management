@@ -10,6 +10,9 @@ const searchTopics = require('../bin/lib/search-topics');
 /* GET home page. */
 router.get('/', (req, res) => {
 
+	debug('Scanning database');
+	console.time('scan')
+	
 	database.scan({
 			TableName : process.env.AWS_AUDIO_METADATA_TABLE,
 			FilterExpression : 'attribute_exists(#uuid)',
@@ -19,6 +22,9 @@ router.get('/', (req, res) => {
 		
 		})
 		.then(data => {
+
+			debug('Database scan complete');
+			console.timeEnd('scan');
 
 			searchTopics('audio-articles')
 				.then(taggedArticles => {

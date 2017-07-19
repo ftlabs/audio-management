@@ -27,7 +27,7 @@
 
 	<div id="rogueAssetsHolder"></div>
 
-	<table id="entriesTable" data-loading="true">
+	<table id="entriesTable" data-loading="true" data-offsetkey="">
 		<thead>
 			<tr>
 				<th>UUID</th>
@@ -102,6 +102,7 @@
 	(function(){
 		var sidebar = document.querySelector('#sidebar');
 		var table = document.querySelector('#main table');
+		var tableBody = table.querySelector('tbody');
 		var deleteDialog = document.querySelector('#deleteConfirm');
 		var deleteSpinner = deleteDialog.querySelector('.progressOverlay');
 		var rogueAssetsHolder = document.querySelector('#main #rogueAssetsHolder');
@@ -110,6 +111,7 @@
 		var searchInput = sidebar.querySelector('form#search input');
 
 		var filterTimeout = "";
+		var firstTableRequest = true;
 
 		var actions = {
 			reset : showAll,
@@ -223,94 +225,110 @@
 			;
 		}, false);
 
-		fetch('/table', {credentials: 'same-origin'})
-			.then(function(res){
-				if(res.ok){
-					return res.text()
-				} else {
-					throw res;
-				}
-			})
-			.then(function(tableHTML){
 
-				table.querySelector('tbody').innerHTML = tableHTML;
-				
-				table.dataset.loading = "false";
-				tableLoading.dataset.visible = "false";
+		function getTableContents(offsetKey){
+			
+			fetch('/table', {credentials: 'same-origin'})
+				.then(function(res){
+					if(res.ok){
+						return res.text()
+					} else {
+						throw res;
+					}
+				})
+				.then(function(tableHTML){
 
-				Array.from(table.querySelectorAll('input[type="checkbox"]')).forEach(function(checkbox){
-
-					checkbox.addEventListener('click', function(){
-
-						var enableOrDisable = this.checked === false ? 'disable' : 'enable';
-
-						console.log('/actions/' + enableOrDisable + '/' + this.dataset.uuid);
-
-						fetch('/actions/' + enableOrDisable + '/' + this.dataset.uuid, {credentials: 'same-origin'})
-							.then(function(res){
-								if(res.ok){
-									return res.json();
-								} else {
-									throw res;
-								}
-							})
-							.then(function(response){
-								console.log(response);
-							})
-							.catch(function(err){
-								console.log('Err', err);
-							})
-						;
-						
-					}, false);
-
-				});
-				
-				Array.from(table.querySelectorAll('.delete')).forEach(function(deleteBtn){
-
-					deleteBtn.addEventListener('click', function(){
-
-						console.log(this);
-						showDeleteDialog(this.dataset.uuid);
-							
-					}, false);
-
-				});
-				
-				searchInput.addEventListener('keyup', function(){
-
-					clearInterval(filterTimeout);
-					filterTimeout = setTimeout(function(){
-						
-						sidebar.querySelectorAll('ul li').forEach(function(li){
-							li.dataset.selected = false;
-						});
-
-						filterRows(this.value);
+					if(firstTableRequest){
+						tableBody.innerHTML = tableHTML;
+						firstTableRequest = false;
+					} else {
+						tableBody.innerHTML = tableBody.innerHTML + tableHTML;
+					}
 					
-					}.bind(this), 200);
+					table.dataset.loading = "false";
+					tableLoading.dataset.visible = "false";
 
-				}, false);
+					Array.from(table.querySelectorAll('input[type="checkbox"]')).forEach(function(checkbox){
 
-				sidebar.querySelectorAll('ul li').forEach(function(li){
-					li.addEventListener('click', function(){
+						checkbox.addEventListener('click', function(){
 
-						sidebar.querySelectorAll('ul li').forEach(function(li){
-							li.dataset.selected = false;
-						});
+							var enableOrDisable = this.checked === false ? 'disable' : 'enable';
 
-						this.dataset.selected = true;
+							console.log('/actions/' + enableOrDisable + '/' + this.dataset.uuid);
 
-						actions[this.dataset.action]();
+							fetch('/actions/' + enableOrDisable + '/' + this.dataset.uuid, {credentials: 'same-origin'})
+								.then(function(res){
+									if(res.ok){
+										return res.json();
+									} else {
+										throw res;
+									}
+								})
+								.then(function(response){
+									console.log(response);
+								})
+								.catch(function(err){
+									console.log('Err', err);
+								})
+							;
+							
+						}, false);
+
+					});
+					
+					Array.from(table.querySelectorAll('.delete')).forEach(function(deleteBtn){
+
+						deleteBtn.addEventListener('click', function(){
+
+							console.log(this);
+							showDeleteDialog(this.dataset.uuid);
+								
+						}, false);
+
+					});
+					
+					searchInput.addEventListener('keyup', function(){
+
+						clearInterval(filterTimeout);
+						filterTimeout = setTimeout(function(){
+							
+							sidebar.querySelectorAll('ul li').forEach(function(li){
+								li.dataset.selected = false;
+							});
+
+							filterRows(this.value);
+						
+						}.bind(this), 200);
 
 					}, false);
-				});
 
-			})
-			.catch(function(err){
-				console.log('An error occurred getting the table data', err);
-			})
-		;
+					sidebar.querySelectorAll('ul li').forEach(function(li){
+						li.addEventListener('click', function(){
+
+							sidebar.querySelectorAll('ul li').forEach(function(li){
+								li.dataset.selected = false;
+							});
+
+							this.dataset.selected = true;
+
+							actions[this.dataset.action]();
+
+						}, false);
+					});
+
+					if(tableBody.querySelector('*[data-offsetkey]') !== null){
+						
+					}
+
+				})
+				.catch(function(err){
+					console.log('An error occurred getting the table data', err);
+				})
+			;
+
+		}
+
+		getTableContents();
 
 		console.log(new URL(window.location.href).searchParams.get("showrogue") );
 

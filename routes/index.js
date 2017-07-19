@@ -7,15 +7,15 @@ const generateS3URL = require('../bin/lib/generate-public-s3-url');
 const dateStampToUnix = require('../bin/lib/convert-datestamp-to-unix');
 const searchTopics = require('../bin/lib/search-topics');
 
-function getArticlesData(){
+function getArticlesData(ExclusiveStartKey){
 	
 	return database.scan({
 		TableName : process.env.AWS_AUDIO_METADATA_TABLE,
 		FilterExpression : 'attribute_exists(#uuid)',
 		ExpressionAttributeNames : {
 			'#uuid': 'uuid'
-		}
-	
+		},
+		ExclusiveStartKey : ExclusiveStartKey
 	})
 	.then(data => {
 
@@ -69,7 +69,8 @@ function getArticlesData(){
 
 				return {
 					audioAssets : readiedAssets,
-					rogueAssets
+					rogueAssets,
+					offsetKey : data.offsetKey
 				};
 
 			})
@@ -93,7 +94,7 @@ router.get('/', (req, res) => {
 
 router.get('/table', (req, res) => {
 
-	getArticlesData()
+	getArticlesData(req.query.offsetKey)
 		.then(data => {
 			debug(data);
 			res.render('partials/table', { 

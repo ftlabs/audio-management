@@ -49,17 +49,15 @@ function getArticlesData(ExclusiveStartKey){
 						item.tagged = taggedArticles.some(tagged => {
 							return tagged.id === item.uuid;
 						});
+						item.__unix_datestamp = dateStampToUnix( item.pubdate );
 
 						return item;
 					})
 					.sort( (a, b) => {
 
-						const aTime = dateStampToUnix( a.pubdate );
-						const bTime = dateStampToUnix( b.pubdate );
-
-						if(aTime > bTime){
+						if(a.__unix_datestamp > b.__unix_datestamp){
 							return -1
-						} else if(aTime < bTime){
+						} else if(a.__unix_datestamp < b.__unix_datestamp){
 							return 1;
 						}
 

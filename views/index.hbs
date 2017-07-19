@@ -228,21 +228,21 @@
 
 		function getTableContents(offsetKey){
 			
-			fetch('/table', {credentials: 'same-origin'})
+			fetch('/table?offsetKey=' + offsetKey, {credentials: 'same-origin'})
 				.then(function(res){
 					if(res.ok){
-						return res.text()
+						return res.json()
 					} else {
 						throw res;
 					}
 				})
-				.then(function(tableHTML){
+				.then(function(data){
 
 					if(firstTableRequest){
-						tableBody.innerHTML = tableHTML;
+						tableBody.innerHTML = data.tableHTML;
 						firstTableRequest = false;
 					} else {
-						tableBody.innerHTML = tableBody.innerHTML + tableHTML;
+						tableBody.innerHTML = tableBody.innerHTML + data.tableHTML;
 					}
 					
 					table.dataset.loading = "false";
@@ -316,8 +316,8 @@
 						}, false);
 					});
 
-					if(tableBody.querySelector('*[data-offsetkey]') !== null){
-						
+					if(data.offsetKey !== undefined){
+						getTableContents(data.offsetKey);
 					}
 
 				})

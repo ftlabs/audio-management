@@ -1,5 +1,7 @@
 const debug = require('debug')('audio-management:routes:index');
+const fs = require('fs');
 const express = require('express');
+const hbs = require('hbs');
 const router = express.Router();
 
 const database = require('../bin/lib/database');
@@ -7,20 +9,23 @@ const generateS3URL = require('../bin/lib/generate-public-s3-url');
 const dateStampToUnix = require('../bin/lib/convert-datestamp-to-unix');
 const searchTopics = require('../bin/lib/search-topics');
 
+const tableSource = fs.readFileSync(`${__dirname}/../views/partials/table.hbs`, 'utf8');
+
 function getArticlesData(ExclusiveStartKey){
-	
-	return database.scan({
+
+	const scanParameters = {
 		TableName : process.env.AWS_AUDIO_METADATA_TABLE,
 		FilterExpression : 'attribute_exists(#uuid)',
 		ExpressionAttributeNames : {
 			'#uuid': 'uuid'
 		},
 		ExclusiveStartKey : ExclusiveStartKey
-	})
+	};
+
+	return database.scan(scanParameters)
 	.then(data => {
 
 		debug('Database scan complete');
-		console.timeEnd('scan');
 
 		return searchTopics('audio-articles')
 			.then(taggedArticles => {
@@ -94,12 +99,20 @@ router.get('/', (req, res) => {
 
 router.get('/table', (req, res) => {
 
-	getArticlesData(req.query.offsetKey)
+	const offsetKey = req.query.offsetKey === 'undefined' ? undefined : req.query.offsetKey;
+
+	getArticlesData(offsetKey)
 		.then(data => {
 			debug(data);
-			res.render('partials/table', { 
+			var template = hbs.compile(tableSource);
+			var result = template({ 
 				audioAssets : Array.from(data.audioAssets),
 				layout : false
+			});
+
+			res.json({
+				offsetKey : data.offsetKey,
+				tableHTML : result
 			});
 		})
 		.catch(err => {

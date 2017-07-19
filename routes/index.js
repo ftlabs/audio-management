@@ -10,6 +10,7 @@ const dateStampToUnix = require('../bin/lib/convert-datestamp-to-unix');
 const searchTopics = require('../bin/lib/search-topics');
 
 const tableSource = fs.readFileSync(`${__dirname}/../views/partials/table.hbs`, 'utf8');
+const rogueSource = fs.readFileSync(`${__dirname}/../views/partials/rogue.hbs`, 'utf8');
 
 function getArticlesData(ExclusiveStartKey){
 
@@ -97,40 +98,24 @@ router.get('/table', (req, res) => {
 	getArticlesData(offsetKey)
 		.then(data => {
 			debug(data);
-			var template = hbs.compile(tableSource);
-			var result = template({ 
-				audioAssets : Array.from(data.audioAssets),
-				layout : false
-			});
+			
+			const tableTemplate = hbs.compile(tableSource);
+			const rogueTemplate = hbs.compile(rogueSource);
 
 			res.json({
 				offsetKey : data.offsetKey,
-				tableHTML : result
+				tableHTML : tableTemplate({ 
+					audioAssets : Array.from(data.audioAssets),
+					layout : false
+				}),
+				rogueHTML : rogueTemplate({
+					rogueAssets : Array.from(data.rogueAssets),
+					layout : false
+				})
 			});
 		})
 		.catch(err => {
 			debug('/table err', err);
-			res.status = err.status || 500;
-			res.json({
-				status : 'err',
-				message : 'An error occurred retrieving the table data'
-			});
-		})
-	;
-
-});
-
-router.get('/rogueassets', (req, res) => {
-	
-	getArticlesData()
-		.then(data => {
-			res.render('partials/rogue', { 
-				rogueAssets : Array.from(data.rogueAssets),
-				layout : false
-			});
-		})
-		.catch(err => {
-			debug('/rogueassets err', err);
 			res.status = err.status || 500;
 			res.json({
 				status : 'err',

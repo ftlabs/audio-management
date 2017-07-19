@@ -226,7 +226,7 @@
 		}, false);
 
 
-		function getTableContents(offsetKey){
+		function getViewContents(offsetKey){
 			
 			fetch('/table?offsetKey=' + offsetKey, {credentials: 'same-origin'})
 				.then(function(res){
@@ -247,6 +247,20 @@
 					
 					table.dataset.loading = "false";
 					tableLoading.dataset.visible = "false";
+
+					console.log(new URL(window.location.href).searchParams.get("showrogue") );
+
+					if(new URL(window.location.href).searchParams.get("showrogue") !== 'false'){
+						
+						rogueAssetsHolder.innerHTML = data.rogueHTML;
+
+						Array.from( document.querySelectorAll('.rogueasset') ).forEach(function(asset){
+							asset.addEventListener('click', function(){
+								this.dataset.collapsed = 'true';
+							}, false);
+						});
+
+					}
 
 					Array.from(table.querySelectorAll('input[type="checkbox"]')).forEach(function(checkbox){
 
@@ -317,7 +331,7 @@
 					});
 
 					if(data.offsetKey !== undefined){
-						getTableContents(data.offsetKey);
+						getViewContents(data.offsetKey);
 					}
 
 				})
@@ -328,37 +342,7 @@
 
 		}
 
-		getTableContents();
-
-		console.log(new URL(window.location.href).searchParams.get("showrogue") );
-
-		if(new URL(window.location.href).searchParams.get("showrogue") !== 'false'){
-
-			fetch('/rogueassets', {credentials : 'include'})
-				.then(function(res){
-					if(res.ok){
-						return res.text();
-					} else {
-						throw res;
-					}
-				})
-				.then(function(rogueHTML){
-					rogueAssetsHolder.innerHTML = rogueHTML;
-
-					Array.from( document.querySelectorAll('.rogueasset') ).forEach(function(asset){
-						asset.addEventListener('click', function(){
-							this.dataset.collapsed = 'true';
-						}, false);
-					});
-
-				})
-				.catch(function(err){
-					console.log(err);
-				})
-			;
-
-		}
-
+		getViewContents();
 
 	}());
 

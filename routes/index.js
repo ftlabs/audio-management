@@ -1,5 +1,7 @@
 const debug = require('debug')('audio-management:routes:index');
+const fs = require('fs');
 const express = require('express');
+const hbs = require('hbs');
 const router = express.Router();
 
 const database = require('../bin/lib/database');
@@ -7,75 +9,73 @@ const generateS3URL = require('../bin/lib/generate-public-s3-url');
 const dateStampToUnix = require('../bin/lib/convert-datestamp-to-unix');
 const searchTopics = require('../bin/lib/search-topics');
 
-function getArticlesData(){
-	
-	return database.scan({
+const tableSource = fs.readFileSync(`${__dirname}/../views/partials/table.hbs`, 'utf8');
+const rogueSource = fs.readFileSync(`${__dirname}/../views/partials/rogue.hbs`, 'utf8');
+
+function getArticlesData(ExclusiveStartKey){
+
+	const scanParameters = {
 		TableName : process.env.AWS_AUDIO_METADATA_TABLE,
 		FilterExpression : 'attribute_exists(#uuid)',
 		ExpressionAttributeNames : {
 			'#uuid': 'uuid'
-		}
-	
-	})
-	.then(data => {
+		},
+		ExclusiveStartKey : ExclusiveStartKey
+	};
 
-		debug('Database scan complete');
-		console.timeEnd('scan');
+	const dataPromises = [database.scan(scanParameters), searchTopics('audio-articles')];
 
-		return searchTopics('audio-articles')
-			.then(taggedArticles => {
+	return Promise.all(dataPromises)
+		.then(results => {
 
-				taggedArticles = taggedArticles.results[0].results;
+			results[1] = results[1].results[0].results;
 
-				const readiedAssets = data.Items.filter(item => {
-						// Items that have been deleted from the database still have their UUID
-						// and enabled values saved, so that if they're reabsorbed, a previously
-						// disabled item will not become re-enabled by default;
-						// The keys are uuid, and enabled 
-						if(Object.keys(item).length > 2){
-							return true;
-						} else {
-							return false;
-						}
-					})
-					.map(item => {
-						item.publicURL = generateS3URL(item.uuid);
+			const readiedAssets = results[0].Items.filter(item => {
+					// Items that have been deleted from the database still have their UUID
+					// and enabled values saved, so that if they're reabsorbed, a previously
+					// disabled item will not become re-enabled by default;
+					// The keys are uuid, and enabled 
+					if(Object.keys(item).length > 2){
+						return true;
+					} else {
+						return false;
+					}
+				})
+				.map(item => {
+					item.publicURL = generateS3URL(item.uuid);
 
-						item.tagged = taggedArticles.some(tagged => {
-							return tagged.id === item.uuid;
-						});
+					item.tagged = results[1].some(tagged => {
+						return tagged.id === item.uuid;
+					});
+					item.__unix_datestamp = dateStampToUnix( item.pubdate );
 
-						return item;
-					})
-					.sort( (a, b) => {
+					return item;
+				})
+				.sort( (a, b) => {
 
-						const aTime = dateStampToUnix( a.pubdate );
-						const bTime = dateStampToUnix( b.pubdate );
+					if(a.__unix_datestamp > b.__unix_datestamp){
+						return -1
+					} else if(a.__unix_datestamp < b.__unix_datestamp){
+						return 1;
+					}
 
-						if(aTime > bTime){
-							return -1
-						} else if(aTime < bTime){
-							return 1;
-						}
+				})
+			;
 
-					})
-				;
+			const rogueAssets = results[1].map(taggedArticle => {
+					return readiedAssets.some( asset => { return asset.uuid === taggedArticle.id } ) ? null : taggedArticle
+				})
+				.filter(a => {return a !== null})
+			;
 
-				const rogueAssets = taggedArticles.map(taggedArticle => {
-						return readiedAssets.some( asset => { return asset.uuid === taggedArticle.id } ) ? null : taggedArticle
-					})
-					.filter(a => {return a !== null})
-				;
+			return {
+				audioAssets : readiedAssets,
+				rogueAssets,
+				offsetKey : results[0].offsetKey
+			};
 
-				return {
-					audioAssets : readiedAssets,
-					rogueAssets
-				};
-
-			})
-		;
-
-	});
+		})
+	;
 
 }
 
@@ -93,37 +93,29 @@ router.get('/', (req, res) => {
 
 router.get('/table', (req, res) => {
 
-	getArticlesData()
+	const offsetKey = req.query.offsetKey === 'undefined' ? undefined : req.query.offsetKey;
+
+	getArticlesData(offsetKey)
 		.then(data => {
 			debug(data);
-			res.render('partials/table', { 
-				audioAssets : Array.from(data.audioAssets),
-				layout : false
+			
+			const tableTemplate = hbs.compile(tableSource);
+			const rogueTemplate = hbs.compile(rogueSource);
+
+			res.json({
+				offsetKey : data.offsetKey,
+				tableHTML : tableTemplate({ 
+					audioAssets : Array.from(data.audioAssets),
+					layout : false
+				}),
+				rogueHTML : rogueTemplate({
+					rogueAssets : Array.from(data.rogueAssets),
+					layout : false
+				})
 			});
 		})
 		.catch(err => {
 			debug('/table err', err);
-			res.status = err.status || 500;
-			res.json({
-				status : 'err',
-				message : 'An error occurred retrieving the table data'
-			});
-		})
-	;
-
-});
-
-router.get('/rogueassets', (req, res) => {
-	
-	getArticlesData()
-		.then(data => {
-			res.render('partials/rogue', { 
-				rogueAssets : Array.from(data.rogueAssets),
-				layout : false
-			});
-		})
-		.catch(err => {
-			debug('/rogueassets err', err);
 			res.status = err.status || 500;
 			res.json({
 				status : 'err',

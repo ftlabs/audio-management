@@ -76,11 +76,12 @@ function readFromDatabase(item, table){
 
 }
 
-function scanDatabase(query){
+function scanDatabase(query, recursive = true){
 	
 	debug('Scanning database', query);
 
 	const results = [];
+	let offsetKey = undefined;
 
 	function scan(query){
 
@@ -98,12 +99,21 @@ function scanDatabase(query){
 						debug(data.Items.length);
 						results.push(data);
 						if(data.LastEvaluatedKey !== undefined){
-							query.ExclusiveStartKey = data.LastEvaluatedKey;
-							return scan(query)
-								.then(function(){
-									resolve();
-								})
-							;
+
+							offsetKey = data.LastEvaluatedKey;
+
+							if(recursive === true){
+								query.ExclusiveStartKey = data.LastEvaluatedKey;
+								debug('Recursive scan underway with following parameters', query);
+								return scan(query)
+									.then(function(){
+										resolve();
+									})
+								;
+							} else {
+								resolve();
+							}
+
 						} else {
 							resolve();
 						}
@@ -132,7 +142,8 @@ function scanDatabase(query){
 			debug('Total number of items:', totalItems.length);
 
 			return {
-				Items : totalItems
+				Items : totalItems,
+				offsetKey : offsetKey
 			};
 
 		})

@@ -104,6 +104,7 @@ function scanDatabase(query, recursive = true){
 
 							if(recursive === true){
 								query.ExclusiveStartKey = data.LastEvaluatedKey;
+								debug('Recursive scan underway with following parameters', query);
 								return scan(query)
 									.then(function(){
 										resolve();

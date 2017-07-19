@@ -22,64 +22,59 @@ function getArticlesData(ExclusiveStartKey){
 		ExclusiveStartKey : ExclusiveStartKey
 	};
 
-	return database.scan(scanParameters)
-	.then(data => {
+	const dataPromises = [database.scan(scanParameters), searchTopics('audio-articles')];
 
-		debug('Database scan complete');
+	return Promise.all(dataPromises)
+		.then(results => {
 
-		return searchTopics('audio-articles')
-			.then(taggedArticles => {
+			results[1] = results[1].results[0].results;
 
-				taggedArticles = taggedArticles.results[0].results;
+			const readiedAssets = results[0].Items.filter(item => {
+					// Items that have been deleted from the database still have their UUID
+					// and enabled values saved, so that if they're reabsorbed, a previously
+					// disabled item will not become re-enabled by default;
+					// The keys are uuid, and enabled 
+					if(Object.keys(item).length > 2){
+						return true;
+					} else {
+						return false;
+					}
+				})
+				.map(item => {
+					item.publicURL = generateS3URL(item.uuid);
 
-				const readiedAssets = data.Items.filter(item => {
-						// Items that have been deleted from the database still have their UUID
-						// and enabled values saved, so that if they're reabsorbed, a previously
-						// disabled item will not become re-enabled by default;
-						// The keys are uuid, and enabled 
-						if(Object.keys(item).length > 2){
-							return true;
-						} else {
-							return false;
-						}
-					})
-					.map(item => {
-						item.publicURL = generateS3URL(item.uuid);
+					item.tagged = results[1].some(tagged => {
+						return tagged.id === item.uuid;
+					});
+					item.__unix_datestamp = dateStampToUnix( item.pubdate );
 
-						item.tagged = taggedArticles.some(tagged => {
-							return tagged.id === item.uuid;
-						});
-						item.__unix_datestamp = dateStampToUnix( item.pubdate );
+					return item;
+				})
+				.sort( (a, b) => {
 
-						return item;
-					})
-					.sort( (a, b) => {
+					if(a.__unix_datestamp > b.__unix_datestamp){
+						return -1
+					} else if(a.__unix_datestamp < b.__unix_datestamp){
+						return 1;
+					}
 
-						if(a.__unix_datestamp > b.__unix_datestamp){
-							return -1
-						} else if(a.__unix_datestamp < b.__unix_datestamp){
-							return 1;
-						}
+				})
+			;
 
-					})
-				;
+			const rogueAssets = results[1].map(taggedArticle => {
+					return readiedAssets.some( asset => { return asset.uuid === taggedArticle.id } ) ? null : taggedArticle
+				})
+				.filter(a => {return a !== null})
+			;
 
-				const rogueAssets = taggedArticles.map(taggedArticle => {
-						return readiedAssets.some( asset => { return asset.uuid === taggedArticle.id } ) ? null : taggedArticle
-					})
-					.filter(a => {return a !== null})
-				;
+			return {
+				audioAssets : readiedAssets,
+				rogueAssets,
+				offsetKey : results[0].offsetKey
+			};
 
-				return {
-					audioAssets : readiedAssets,
-					rogueAssets,
-					offsetKey : data.offsetKey
-				};
-
-			})
-		;
-
-	});
+		})
+	;
 
 }
 

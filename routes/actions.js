@@ -69,22 +69,17 @@ router.get(`^(/enable|/disable)/:UUID(${uuidRegex})$`, (req, res) => {
 router.get(`/delete/:UUID(${uuidRegex})`, (req, res) => {
 
 	obliviate(req.params.UUID)
-		.then(function(){
-
-			purgeCacheItem(req.params.UUID)
-				.catch(err => {
-					debug(err);
-				})
-			;
-
+		.then(result => {
 			res.json({
-				status : 'ok',
-				message : `Audio files and associated metadata for ${req.params.UUID} have been deleted`
+				status: 'ok',
+				message: result.message
 			});
-
 		})
-	;
-
+		.catch(err => {
+			debug(err);
+			res.status(err.statusCode || 500);
+			res.json(err)
+		});
 
 });
 

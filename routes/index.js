@@ -16,10 +16,14 @@ function getArticlesData(ExclusiveStartKey){
 
 	const scanParameters = {
 		TableName : process.env.AWS_AUDIO_METADATA_TABLE,
-		FilterExpression : 'attribute_exists(#uuid)',
 		ExpressionAttributeNames : {
-			'#uuid': 'uuid'
+			'#uuid': 'uuid',
+			'#H': 'is-human'
 		},
+		ExpressionAttributeValues : {
+			':human': 'true'
+		},
+		FilterExpression : 'attribute_exists(#uuid) and #H = :human',
 		ExclusiveStartKey : ExclusiveStartKey
 	};
 

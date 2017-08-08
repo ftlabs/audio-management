@@ -244,14 +244,14 @@
 					} else {
 						tableBody.innerHTML = tableBody.innerHTML + data.tableHTML;
 					}
-					
+
 					table.dataset.loading = "false";
 					tableLoading.dataset.visible = "false";
 
 					console.log(new URL(window.location.href).searchParams.get("showrogue") );
 
-					if(new URL(window.location.href).searchParams.get("showrogue") !== 'false'){
-						
+					if(new URL(window.location.href).searchParams.get("showrogue") === 'true'){
+
 						rogueAssetsHolder.innerHTML = data.rogueHTML;
 
 						Array.from( document.querySelectorAll('.rogueasset') ).forEach(function(asset){

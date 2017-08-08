@@ -66,11 +66,7 @@ function getArticlesData(ExclusiveStartKey){
 				})
 			;
 
-			const rogueAssets = results[1].map(taggedArticle => {
-					return readiedAssets.some( asset => { return asset.uuid === taggedArticle.id } ) ? null : taggedArticle
-				})
-				.filter(a => {return a !== null})
-			;
+			const rogueAssets = [];
 
 			return {
 				audioAssets : readiedAssets,

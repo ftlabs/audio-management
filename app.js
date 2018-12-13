@@ -4,7 +4,7 @@ const favicon = require('serve-favicon');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const S3O = require('s3o-middleware');
+const S3O = require('@financial-times/s3o-middleware');
 const log = require('./bin/lib/log');
 const registerPartials = require('./bin/lib/register-handlebar-partials');
 

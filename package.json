@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@financial-times/s3o-middleware": "^2.1.1",
-    "aws-sdk": "^2.543.0",
+    "aws-sdk": "^2.814.0",
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.4",
     "debug": "^2.6.3",
